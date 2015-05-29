@@ -5,7 +5,7 @@ import logging
 
 class PIRegulator:
 
-    def __init__(self, kp, ki):
+    def __init__(self, kp, ki, normal):
         self.integral = 0
         self.expected_value = 0.0
         self.kp = kp
@@ -14,6 +14,7 @@ class PIRegulator:
         self.pid_max = 420
         self.pid_min = 0
         self.f1 = open('/var/www/pid.php', 'w+')
+        self.normal = normal
 
     def set_point(self, value=1.0):
         self.expected_value = value
@@ -32,7 +33,7 @@ class PIRegulator:
         # Calculate the output signal
         output_proportional = self.kp * error
         output_integral = (1.0/self.ki) * integral
-        output = self.within_min_max(output_proportional + output_integral)
+        output = self.within_min_max(output_proportional + output_integral + int(self.normal))
 
         # Check that no windup can occur, if windup dont integrate the error.
         if self.pid_min < output < self.pid_max:

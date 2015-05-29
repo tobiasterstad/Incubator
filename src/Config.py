@@ -7,6 +7,7 @@ class Config:
     def __init__(self):
         self.config_file = 'incubator.properties'
         self.temp = 37.5
+        self.normal = 100
         self.day = None
         self.roll_interval = None
         self.reload()
@@ -25,6 +26,9 @@ class Config:
             if x[0] == 'roll_interval':
                 self.roll_interval = x[1].strip()
 
+            if x[0] == 'normal':
+                self.normal = x[1].strip()
+
         f.close()
 
     def get_temp(self):
@@ -42,9 +46,16 @@ class Config:
     def set_day(self, day):
         self.day = day
 
+    def get_normal(self):
+        return self.normal
+
     def save(self):
         f = open(self.config_file, 'w')
         f.write("temp="+self.temp+"\n")
         f.write("day="+str(self.day)+"\n")
         f.write("roll_interval="+str(self.roll_interval)+"\n")
+        f.write("normal="+str(self.normal)+"\n")
         f.close()
+
+    def set_normal(self, p):
+        self.normal = p

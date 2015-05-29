@@ -39,7 +39,7 @@ class Incubator:
 
         config = Config()
 
-        p = PIRegulator(200, 5)
+        p = PIRegulator(200, 5, config.get_normal())
         p.set_point(config.get_temp())
 
         roller = Roller()
@@ -65,6 +65,7 @@ class Incubator:
 
                 if config.get_day() != day:
                     config.set_day(day)
+                    config.set_normal(p)
                     config.save()
 
                 time_str = datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
