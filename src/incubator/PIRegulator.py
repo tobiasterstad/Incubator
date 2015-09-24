@@ -11,7 +11,7 @@ class PIRegulator:
         self.kp = kp
         self.ki = ki
 
-        self.pid_max = 420
+        self.pid_max = 400
         self.pid_min = 0
         self.f1 = open('/var/www/pid.php', 'w+')
         self.normal = normal
@@ -33,10 +33,10 @@ class PIRegulator:
         # Calculate the output signal
         output_proportional = self.kp * error
         output_integral = (1.0/self.ki) * integral
-        output = self.within_min_max(output_proportional + output_integral + int(self.normal))
+        output = self.within_min_max(output_proportional + output_integral)
 
         # Check that no windup can occur, if windup dont integrate the error.
-        if self.pid_min < output < self.pid_max:
+        if self.pid_min < output < self.pid_max and 36.0 < measured_value < 39:
             self.integral = integral
 
         self.f1.write("V:"+str(measured_value)

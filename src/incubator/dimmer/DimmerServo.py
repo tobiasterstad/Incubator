@@ -1,6 +1,7 @@
 __author__ = 'tobias'
 
-from ABElectronics_ServoPi import PWM
+from src.incubator.servopi.ABE_ServoPi import PWM
+
 
 # 0 - 420      145/570
 class DimmerServo:
@@ -14,8 +15,8 @@ class DimmerServo:
         self.dimmer_min = 570  # Max pulse length out of 4096
 
         # Set PWM frequency to 50 Hz
-        self.pwm.setPWMFreq(50)
-        self.pwm.outputEnable()
+        self.pwm.set_pwm_freq(50)
+        self.pwm.output_enable()
 
     def dim(self, level):
         servo = level + 145
@@ -25,5 +26,5 @@ class DimmerServo:
         elif servo < self.dimmer_max:
             servo = self.dimmer_max
 
-        #print level
-        self.pwm.setPWM(15, 0, servo)
+        # print level
+        self.pwm.set_pwm(15, 0, servo)

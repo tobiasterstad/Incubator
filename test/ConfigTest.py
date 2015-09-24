@@ -1,4 +1,4 @@
-from Config import Config
+from src.Config import Config
 
 config = Config()
 config.reload()
