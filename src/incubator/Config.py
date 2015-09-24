@@ -11,6 +11,8 @@ class Config:
         self.day = None
         self.roll_interval = None
         self.humidity = 45
+        self.k = 100.0
+        self.i = 1.0
         self.reload()
 
     def reload(self):
@@ -33,6 +35,12 @@ class Config:
             if x[0] == 'humidity':
                 self.humidity = x[1].strip()
 
+            if x[0] == 'k':
+                self.k = x[1].strip()
+
+            if x[0] == 'i':
+                self.i = x[1].strip()
+
         f.close()
 
     def get_temp(self):
@@ -50,23 +58,25 @@ class Config:
     def set_day(self, day):
         self.day = day
 
-    def get_normal(self):
-        return self.normal
-
     def get_humidity(self):
         return int(self.humidity)
 
     def set_humidity(self, humidity):
         self.humidity = humidity
 
+    def get_k(self):
+        return round(float(self.k), 1)
+
+    def get_i(self):
+        return round(float(self.i), 1)
+
     def save(self):
         f = open(self.config_file, 'w')
         f.write("temp="+str(self.temp)+"\n")
         f.write("day="+str(self.day)+"\n")
         f.write("roll_interval="+str(self.roll_interval)+"\n")
-        f.write("normal="+str(self.normal)+"\n")
         f.write("humidity="+str(self.humidity)+"\n")
-        f.close()
+        f.write("k="+str(self.k)+"\n")
+        f.write("i="+str(self.i)+"\n")
 
-    def set_normal(self, p):
-        self.normal = p
+        f.close()

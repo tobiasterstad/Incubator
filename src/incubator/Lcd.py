@@ -12,11 +12,14 @@ class Lcd():
         self.set_contrast(150)
 
     def update(self, temp, day, pid, roll, humidity):
-        self.clear()
-        self.message("Temp: " + str(round(temp, 1)) + "  Dag: " + str(day) + "\n")
-        self.message("PID : " + str(pid) + "/400\n")
-        self.message("Turn: " + str(roll) + "\n")
-        self.message("Humi: " + str(humidity))
+        try:
+            self.clear()
+            self.message("Temp: " + str(round(temp, 1)) + "  Dag: " + str(day) + "\n")
+            self.message("PID : " + str(pid) + "/400\n")
+            self.message("Turn: " + str(roll) + "\n")
+            self.message("Humi: " + str(humidity))
+        except:
+            None
 
     def clear(self):
         self.bus.write_byte_data(self.address, 0xfe, 0x58)

@@ -1,7 +1,6 @@
 __author__ = 'tobias'
 # coding=UTF-8
 
-from PIRegulator import PIRegulator
 from Roller import Roller
 from TempSensor import TempSensor
 from datetime import *
@@ -65,12 +64,9 @@ class Incubator:
         logging.info("Incubator started... " + self.start_time.strftime('%Y-%m-%d %H:%M:%S'))
 
         config = Config()
-
-        p = PIRegulator(100, 4.0, config.get_normal())
-        p.set_point(config.get_temp())
+        self.ssr.set_point(config.get_temp())
 
         # Start roller
-
         self.roller.set_day(config.get_day())
         self.roller.start()
 
@@ -90,30 +86,30 @@ class Incubator:
         i = 0
         while True:
             temp = temp_sensor.read_temp()
-            pid = p.update(temp)
-            self.ssr.set_value(pid)
+            pid = self.ssr.update(temp)
 
-            if i >= 3:
+            if i >= 30:
                 # Set new temp from config file
                 config.reload()
-                p.set_point(config.get_temp())
+                self.ssr.set_point(config.get_temp())
+                self.ssr.set_k(config.get_k())
+                self.ssr.set_i(config.get_i())
+
                 self.ventilation.set_point(config.get_humidity())
 
                 day = self.get_days_from_start()
 
                 if config.get_day() != day:
                     config.set_day(day)
-                    config.set_normal(pid)
                     config.save()
                     self.roller.set_day(day)
 
                 time_str = datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
                 logging.info(time_str + ", " + str(config.get_temp()) + ", " + str(temp) + ", " + str(pid) + ", "
-                             + str(day) + ", " + str(self.ventilation.get_humidity()) + "," + str(self.roller.get_minutes_from_last_roll()))
+                             + str(day) + ", " + str(self.ventilation.get_humidity()) + ", " + str(self.roller.get_minutes_from_last_roll()))
 
                 # update web page
                 web.update(time_str, str(temp), str(pid))
-
 
                 i = 0
             else:
@@ -122,7 +118,7 @@ class Incubator:
 
             lcd.update(temp, day, pid, self.roller.get_minutes_from_last_roll(), self.ventilation.get_humidity())
             sys.stdout.flush()
-            time.sleep(10)
+            time.sleep(1)
 
         # Stop all services
         self.roller.stop()
@@ -130,6 +126,11 @@ class Incubator:
         self.ventilation.stop()
         self.pwm_controller.stop()
         self.q.put("exit")
+
+        self.roller.join()
+        self.ssr.join()
+        self.ventilation.join()
+        self.pwm_controller.join()
         # self.io_handler.stop()
 
 

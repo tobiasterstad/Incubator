@@ -5,7 +5,7 @@ import logging
 
 class PIRegulator:
 
-    def __init__(self, kp, ki, normal):
+    def __init__(self, kp, ki):
         self.integral = 0
         self.expected_value = 0.0
         self.kp = kp
@@ -14,7 +14,6 @@ class PIRegulator:
         self.pid_max = 400
         self.pid_min = 0
         self.f1 = open('/var/www/pid.php', 'w+')
-        self.normal = normal
 
     def set_point(self, value=1.0):
         self.expected_value = value
@@ -49,6 +48,3 @@ class PIRegulator:
         logging.debug("TEMP: %s OUT: %s E: %s P: %s I: %s", str(measured_value), int(output), str(error),
                       int(output_proportional), int(output_integral))
         return int(output)
-
-    def get_ki(self):
-        return self.ki

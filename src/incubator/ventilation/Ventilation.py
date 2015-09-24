@@ -19,15 +19,24 @@ class Ventilation(threading.Thread):
         self.integral = 0
         self.expected_value = 0.0
 
-        self.kp = 400
-        self.ki = 0.5
+        self.kp = 200
+        self.ki = 0.3
 
         self.pid_max = 4095
         self.pid_min = 0
 
         self._running = True
 
-        self.htu21d = HTU21D()
+        init_ok = False
+        while not init_ok:
+            try:
+                self.htu21d = HTU21D()
+                init_ok = True
+            except:
+                print("Failed to init humidity sensor")
+                init_ok = False
+                time.sleep(1)
+
         threading.Thread.__init__(self)
 
     def run(self):
@@ -35,10 +44,17 @@ class Ventilation(threading.Thread):
         cycle = (1 / 50)  # 50 Hz
         self.humidity = 50
         while self._running:
-            try:
-                self.humidity = self.htu21d.read_humidity()
-            except:
-                None
+
+            read_ok = False
+            while not read_ok:
+                try:
+                    self.humidity = self.htu21d.read_humidity()
+                    read_ok = True
+                except:
+                    logging.debug("failed to read humidity")
+                    read_ok = False
+                    time.sleep(1)
+
             level = self.update(self.humidity)
 
             print("humidity", str(self.humidity))
@@ -87,7 +103,7 @@ class Ventilation(threading.Thread):
         return self.ki
 
     def get_humidity(self):
-        return round(self.humidity, 0)
+        return int(self.humidity)
 
     def get_temp(self):
         return round(self.htu21d.read_temperature(), 1)
