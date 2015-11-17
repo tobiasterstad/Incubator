@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9c430d0f-2376-4fd5-82f7-fa7f1ddf1618" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/incubator.sh" afterPath="$PROJECT_DIR$/incubator.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Incubator.iws" />
@@ -779,7 +778,7 @@
       <workItem from="1442844765569" duration="12432000" />
       <workItem from="1443076811473" duration="17011000" />
       <workItem from="1445630090179" duration="1633000" />
-      <workItem from="1447744944486" duration="1801000" />
+      <workItem from="1447744944486" duration="1815000" />
     </task>
     <task id="LOCAL-00001" summary="Lagt in i git">
       <created>1432851199118</created>
@@ -835,11 +834,17 @@
       <option name="project" value="LOCAL" />
       <updated>1447748195512</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Cleanup start script">
+      <created>1447748531499</created>
+      <option name="number" value="00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1447748531499</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="59185000" />
+    <option name="totallyTimeSpent" value="59199000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1053" extended-state="6" />
