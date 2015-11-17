@@ -1,12 +1,14 @@
 __author__ = 'tobias'
 
+
 class Web:
 
     def __init__(self):
         print "init web"
 
-    def update(self, date, temp, pid):
-        f1=open('/var/www/index.php', 'w+')
+    @staticmethod
+    def update(date, temp, pid):
+        f1 = open('/var/www/index.php', 'w+')
 
         f1.write("<html>")
         f1.write("<head></head>")
