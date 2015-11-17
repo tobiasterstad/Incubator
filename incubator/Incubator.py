@@ -21,7 +21,7 @@ from Queue import Queue
 
 class Incubator:
     def __init__(self):
-        print "Init incubator."
+        logging.debug("Init incubator.")
         config = Config()
         day_tmp = config.get_day()
 
@@ -46,11 +46,11 @@ class Incubator:
             self.roll_time = datetime.today()
 
     def signal_term_handler(self, signal, frame):
-        print "got SIGTERM"
+        logging.debug("got SIGTERM")
         self.roller.stop()
         self.ssr.stop()
         self.ventilation.stop()
-        print "stopped"
+        logging.info("Stopped Incubator")
         sys.exit(0)
 
     # Get the number of days since start
@@ -59,8 +59,6 @@ class Incubator:
         return diff.days + 1
 
     def main(self):
-        logging.basicConfig(level=logging.INFO)
-
         logging.info("Incubator started... " + self.start_time.strftime('%Y-%m-%d %H:%M:%S'))
 
         config = Config()
@@ -114,7 +112,6 @@ class Incubator:
                 i = 0
             else:
                 i += 1
-                # print str(pid)
 
             lcd.update(temp, day, pid, self.roller.get_minutes_from_last_roll(), self.ventilation.get_humidity())
             sys.stdout.flush()
@@ -134,10 +131,14 @@ class Incubator:
         # self.io_handler.stop()
 
 
-incubator = Incubator()
+if __name__ == '__main__':
+    logging.basicConfig(filename='incubator.log', format='%(asctime)s %(levelname)s : %(name)s : %(message)s',
+                        level=logging.DEBUG)
 
-# Add signal handler
-signal.signal(signal.SIGTERM, incubator.signal_term_handler)
+    incubator = Incubator()
 
-# Run incubator
-incubator.main()
+    # Add signal handler
+    signal.signal(signal.SIGTERM, incubator.signal_term_handler)
+
+    # Run incubator
+    incubator.main()
