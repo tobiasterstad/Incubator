@@ -8,7 +8,7 @@ if [ $USER != "root" ] ; then
 fi
 
 if [ "$1" = "start" ] ; then
-    echo "starting incubator"
+    echo "Starting incubator"
     sudo modprobe w1-gpio
     sudo modprobe w1-therm
     sudo python $INCUBATOR_HOME/incubator/Incubator.py >> $INCUBATOR_HOME/incubator.log 2>&1 &
