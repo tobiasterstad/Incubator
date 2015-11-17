@@ -1,10 +1,12 @@
 __author__ = 'tobias'
 
+import logging
+
 
 class Web:
 
     def __init__(self):
-        print "init web"
+        logging.info("init web")
 
     @staticmethod
     def update(date, temp, pid):

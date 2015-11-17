@@ -42,7 +42,7 @@ class SSRRegulator(threading.Thread):
         self._running = True
 
     def run(self):
-        print "Starting SSRRegulator"
+        logging.info("Starting SSRRegulator")
         while self._running:
             step = self.cycle/self.steps
             on = self.value * step
@@ -57,11 +57,10 @@ class SSRRegulator(threading.Thread):
             # print "OFF"
             time.sleep(off)
 
-        print "Stopping SSRRegulator"
+        logging.info("Stopping SSRRegulator")
 
     def stop(self):
         self._running = False
-        print("stopping..")
 
     def set_value(self, value):
         if value > self.steps:

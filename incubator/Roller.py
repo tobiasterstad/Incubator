@@ -5,6 +5,7 @@ __author__ = 'tobias'
 from datetime import datetime
 import time
 import threading
+import logging
 
 servoMin = 170  # Min pulse length out of 4096
 servoMax = 450  # Max pulse length out of 4096
@@ -26,6 +27,7 @@ class Roller(threading.Thread):
         self.running = False
 
     def run(self):
+        logging.info("Starting Roller")
         self.running = True
         i = 0
         while self.running:
@@ -36,7 +38,7 @@ class Roller(threading.Thread):
             # Sleep 1 minute
             time.sleep(6)
             i += 1
-        print "Stopping Roller"
+        logging.info("Stopping Roller")
 
     def stop(self):
         self.running = False
@@ -45,7 +47,7 @@ class Roller(threading.Thread):
         self.day = day
 
     def roll(self):
-        print "Roll eggs"
+        logging.debug("Roll eggs")
         self.roll_time = datetime.today()
 
         if self.direction == 0:

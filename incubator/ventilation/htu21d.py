@@ -4,6 +4,7 @@ import struct
 import array
 import time
 import i2c_base
+import logging
 
 HTU21D_ADDR = 0x40
 CMD_READ_TEMP_HOLD = b"\xE3"
@@ -90,5 +91,5 @@ class HTU21D(object):
 
 if __name__ == "__main__":
     obj = HTU21D()
-    print("Temp: %s C" % obj.read_temperature())
-    print("Humid: %s %% rH" % obj.read_humidity())
+    logging.info("Temp: %s C" % obj.read_temperature())
+    logging.info("Humid: %s %% rH" % obj.read_humidity())

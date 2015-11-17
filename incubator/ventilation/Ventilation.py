@@ -35,14 +35,14 @@ class Ventilation(threading.Thread):
                 self.htu21d = HTU21D()
                 init_ok = True
             except:
-                print("Failed to init humidity sensor")
+                logging.error("Failed to init humidity sensor")
                 init_ok = False
                 time.sleep(1)
 
         threading.Thread.__init__(self)
 
     def run(self):
-        print "Starting Ventilation"
+        logging.info("Starting Ventilation")
         while self._running:
 
             read_ok = False
@@ -59,22 +59,21 @@ class Ventilation(threading.Thread):
 
             level = self.update(self.humidity)
 
-            print("humidity", str(self.humidity))
-            print("level", str(level))
+            logging.debug("humidity", str(self.humidity))
+            logging.debug("level", str(level))
 
             # self.pwm.set_pwm(1, on, off)
             self.q.put_nowait("15:"+str(level))
             time.sleep(10)
 
-        print "Stopping Ventilation done"
+        logging.info("Stopping Ventilation done")
 
     def stop(self):
         self._running = False
-        print("Stopping Ventilation...")
 
     def set_point(self, value=1.0):
         if self.expected_value != value:
-            print("Change ventilation set point" + str(value))
+            logging.debug("Change ventilation set point" + str(value))
         self.expected_value = value
 
     def within_min_max(self, output):

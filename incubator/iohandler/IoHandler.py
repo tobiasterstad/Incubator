@@ -3,6 +3,7 @@ __author__ = 'tobias'
 import threading
 import time
 import RPi.GPIO as GPIO
+import logging
 
 
 class IoHandler(threading.Thread):
@@ -41,13 +42,13 @@ class IoHandler(threading.Thread):
             if button1 != self.button1:
                 self.button1 = button1
                 self.set_relay(button1, self.relay1_pin)
-                print("Button 1 Pressed")
+                logging.info("Button 1 Pressed")
 
             button2 = GPIO.input(self.button2_pin)
             if button2 != self.button2:
                 self.button2 = button2
                 self.set_relay(button2, self.relay2_pin)
-                print("Button 2 Pressed")
+                logging.info("Button 2 Pressed")
 
             time.sleep(0.05)
 

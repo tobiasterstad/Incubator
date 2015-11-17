@@ -5,6 +5,7 @@ from servopi.ABE_ServoPi import PWM
 import smbus
 import threading
 import time
+import logging
 
 
 class PWMController(threading.Thread):
@@ -19,13 +20,13 @@ class PWMController(threading.Thread):
         self.running = False
 
     def run(self):
-        print("Starting PWM Controller")
+        logging.info("Starting PWM Controller")
         self.running = True
 
         while self.running:
             a = self.q.get()
 
-            print("Received: "+a)
+            logging.debug("Received: "+a)
             if a is None:
                 self.running = False
 
@@ -40,7 +41,7 @@ class PWMController(threading.Thread):
 
             time.sleep(5)
 
-        print("Stopping PWM Controller")
+        logging.info("Stopping PWM Controller")
 
     def stop(self):
         self.running = False
