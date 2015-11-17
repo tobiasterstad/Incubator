@@ -15,7 +15,7 @@ if [ "$1" = "start" ] ; then
 elif [ "$1" = "stop" ] ; then
 #ps axf | grep python | grep -v grep | awk '{print "kill " $1}'
 
-    PID=`ps axf | grep "sudo python /home/pi/incubator2/incubator/Incubator.py" | grep -v grep | awk '{print $1}'`
+    PID=`ps axf | grep "sudo python $INCUBATOR_HOME/incubator/Incubator.py" | grep -v grep | awk '{print $1}'`
     kill "$PID"
-    echo "stopping incubator"
+    echo "Stopping incubator"
 fi
