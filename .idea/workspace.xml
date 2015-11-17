@@ -1,34 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9c430d0f-2376-4fd5-82f7-fa7f1ddf1618" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/deploy.sh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/Config.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/Incubator.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/Lcd.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/PWMController.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/Roller.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/TempSensor.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/Web.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/dimmer/Dimmer.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/dimmer/DimmerServo.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/dimmer/SSRRegulator.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/dimmer/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/iohandler/IoHandler.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/iohandler/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/servopi/ABE_ServoPi.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/servopi/ABElectronics_ServoPi.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/servopi/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/ventilation/Ventilation.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/ventilation/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/ventilation/htu21d.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/incubator/ventilation/i2c_base.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/incubator.properties" afterPath="$PROJECT_DIR$/incubator.properties.default" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/incubator.sh" afterPath="$PROJECT_DIR$/incubator.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="9c430d0f-2376-4fd5-82f7-fa7f1ddf1618" name="Default" comment="" />
     <ignored path="Incubator.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -775,7 +748,7 @@
       <workItem from="1442844765569" duration="12432000" />
       <workItem from="1443076811473" duration="17011000" />
       <workItem from="1445630090179" duration="1633000" />
-      <workItem from="1447744944486" duration="1065000" />
+      <workItem from="1447744944486" duration="1088000" />
     </task>
     <task id="LOCAL-00001" summary="Lagt in i git">
       <created>1432851199118</created>
@@ -819,11 +792,17 @@
       <option name="project" value="LOCAL" />
       <updated>1447747624681</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Moved files">
+      <created>1447747746474</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1447747746474</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58449000" />
+    <option name="totallyTimeSpent" value="58472000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1053" extended-state="6" />
@@ -881,7 +860,8 @@
     <MESSAGE value="combined ssr and pi regulator" />
     <MESSAGE value="..." />
     <MESSAGE value="Deleted old files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Deleted old files" />
+    <MESSAGE value="Moved files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
