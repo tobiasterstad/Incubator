@@ -19,13 +19,15 @@ class Ventilation(threading.Thread):
         self.integral = 0
         self.expected_value = 0.0
 
-        self.kp = 200
-        self.ki = 0.3
+        self.kp = 150
+        self.ki = 1.0
 
         self.pid_max = 4095
         self.pid_min = 0
 
         self._running = True
+
+        self.humidity = 50
 
         init_ok = False
         while not init_ok:
@@ -41,15 +43,15 @@ class Ventilation(threading.Thread):
 
     def run(self):
         print "Starting Ventilation"
-        cycle = (1 / 50)  # 50 Hz
-        self.humidity = 50
         while self._running:
 
             read_ok = False
             while not read_ok:
                 try:
-                    self.humidity = self.htu21d.read_humidity()
-                    read_ok = True
+                    humidity = self.htu21d.read_humidity()
+                    if humidity > 0 and self.humidity - 20 < humidity < self.humidity + 20:
+                        read_ok = True
+                        self.humidity = humidity
                 except:
                     logging.debug("failed to read humidity")
                     read_ok = False
@@ -64,11 +66,11 @@ class Ventilation(threading.Thread):
             self.q.put_nowait("15:"+str(level))
             time.sleep(10)
 
-        print "Stopping Ventilation"
+        print "Stopping Ventilation done"
 
     def stop(self):
         self._running = False
-        print("stopping...")
+        print("Stopping Ventilation...")
 
     def set_point(self, value=1.0):
         if self.expected_value != value:
@@ -96,7 +98,7 @@ class Ventilation(threading.Thread):
             self.integral = integral
 
         logging.info("Ventilation: %s OUT: %s E: %s P: %s I: %s", str(measured_value), int(output), str(error),
-                      int(output_proportional), int(output_integral))
+                     int(output_proportional), int(output_integral))
         return int(output)
 
     def get_ki(self):
