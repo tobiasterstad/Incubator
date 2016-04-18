@@ -31,12 +31,12 @@ class Roller(threading.Thread):
         self.running = True
         i = 0
         while self.running:
-            if 1 <= self.day <= 18 and i >= 600:
+            if 1 <= self.day <= 18 and i >= (self.roll_interval*60):
                 self.roll()
                 i = 0
 
             # Sleep 1 minute
-            time.sleep(6)
+            time.sleep(1)
             i += 1
         logging.info("Stopping Roller")
 
