@@ -1,11 +1,11 @@
 __author__ = 'tobias'
 
+import threading
+import logging
+from Queue import Queue
 
 from servopi.ABE_ServoPi import PWM
 import smbus
-import threading
-import time
-import logging
 
 
 class PWMController(threading.Thread):
@@ -24,22 +24,24 @@ class PWMController(threading.Thread):
         self.running = True
 
         while self.running:
-            a = self.q.get(True)
+            try:
+                a = self.q.get(True, 5)
 
-            logging.debug("Received: "+a)
-            if a is None:
-                self.running = False
+                logging.debug("Received: "+a)
+                if a is None:
+                    self.running = False
 
-            if a == "exit":
-                self.running = False
+                if a == "exit":
+                    self.running = False
 
-            split = a.split(":")
-            adr = split[0]
-            value = split[1]
+                split = a.split(":")
+                adr = split[0]
+                value = split[1]
 
-            self.pwm.set_pwm(int(adr), 0, int(value))
+                self.pwm.set_pwm(int(adr), 0, int(value))
 
-            time.sleep(0.1)
+            except Queue.empty:
+                None
 
         logging.info("Stopped PWM Controller")
 
