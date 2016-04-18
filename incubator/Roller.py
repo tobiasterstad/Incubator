@@ -60,13 +60,13 @@ class Roller(threading.Thread):
     def roll_left(self):
         for i in range(servoMin, servoMax, 1):
             # self.pwm.set_pwm(0, 0, i)
-            self.q.put("0:"+i)
+            self.q.put("0:"+str(i))
             time.sleep(0.05)
 
     def roll_right(self):
         for i in range(servoMax, servoMin, -1):
             # self.pwm.set_pwm(0, 0, i)
-            self.q.put("0:"+i)
+            self.q.put("0:"+str(i))
             time.sleep(0.05)
 
     # Get the number of hours since last flip

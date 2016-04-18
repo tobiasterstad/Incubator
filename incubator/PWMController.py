@@ -24,7 +24,7 @@ class PWMController(threading.Thread):
         self.running = True
 
         while self.running:
-            a = self.q.get()
+            a = self.q.get(True)
 
             logging.debug("Received: "+a)
             if a is None:
@@ -39,7 +39,7 @@ class PWMController(threading.Thread):
 
             self.pwm.set_pwm(int(adr), 0, int(value))
 
-            time.sleep(5)
+            time.sleep(0.1)
 
         logging.info("Stopping PWM Controller")
 
