@@ -50,6 +50,7 @@ class Incubator:
         self.roller.stop()
         self.ssr.stop()
         self.ventilation.stop()
+        self.pwm_controller.stop()
         logging.info("Stopped Incubator")
         sys.exit(0)
 

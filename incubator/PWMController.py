@@ -41,7 +41,7 @@ class PWMController(threading.Thread):
 
             time.sleep(0.1)
 
-        logging.info("Stopping PWM Controller")
+        logging.info("Stopped PWM Controller")
 
     def stop(self):
         self.running = False
