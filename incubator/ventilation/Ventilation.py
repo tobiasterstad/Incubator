@@ -44,25 +44,20 @@ class Ventilation(threading.Thread):
     def run(self):
         logging.info("Starting Ventilation")
         while self._running:
+            try:
+                humidity = self.htu21d.read_humidity()
+                if humidity > 0 and self.humidity - 20 < humidity < self.humidity + 20:
+                    self.humidity = humidity
 
-            read_ok = False
-            while not read_ok:
-                try:
-                    humidity = self.htu21d.read_humidity()
-                    if humidity > 0 and self.humidity - 20 < humidity < self.humidity + 20:
-                        read_ok = True
-                        self.humidity = humidity
+                level = self.update(self.humidity)
 
-                    level = self.update(self.humidity)
+                logging.debug("humidity", str(self.humidity))
+                logging.debug("level", str(level))
 
-                    logging.debug("humidity", str(self.humidity))
-                    logging.debug("level", str(level))
-
-                    # self.pwm.set_pwm(1, on, off)
-                    self.q.put_nowait("15:"+str(level))
-                except:
-                    logging.debug("failed to read humidity")
-                    read_ok = False
+                # self.pwm.set_pwm(1, on, off)
+                self.q.put_nowait("15:"+str(level))
+            except:
+                logging.debug("failed to read humidity")
 
             time.sleep(10)
 
