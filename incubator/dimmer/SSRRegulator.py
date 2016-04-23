@@ -99,7 +99,7 @@ class SSRRegulator(threading.Thread):
         output = self.within_min_max(output_proportional + output_integral)
 
         # Check that no windup can occur, if windup dont integrate the error.
-        if self.pid_min < output < self.pid_max and 36.0 < measured_value < 39:
+        if self.pid_min < output < self.pid_max and 35.0 < measured_value < 39:
             self.integral = integral
 
         self.f1.write("V:"+str(measured_value)
