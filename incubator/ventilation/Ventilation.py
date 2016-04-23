@@ -55,7 +55,7 @@ class Ventilation(threading.Thread):
                 except:
                     logging.debug("failed to read humidity")
                     read_ok = False
-                    time.sleep(1)
+                    time.sleep(10)
 
             level = self.update(self.humidity)
 

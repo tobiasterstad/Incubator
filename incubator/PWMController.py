@@ -40,7 +40,7 @@ class PWMController(threading.Thread):
 
                 self.pwm.set_pwm(int(adr), 0, int(value))
 
-            except Queue.empty:
+            except:
                 None
 
         logging.info("Stopped PWM Controller")
