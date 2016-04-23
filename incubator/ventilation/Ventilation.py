@@ -52,18 +52,18 @@ class Ventilation(threading.Thread):
                     if humidity > 0 and self.humidity - 20 < humidity < self.humidity + 20:
                         read_ok = True
                         self.humidity = humidity
+
+                    level = self.update(self.humidity)
+
+                    logging.debug("humidity", str(self.humidity))
+                    logging.debug("level", str(level))
+
+                    # self.pwm.set_pwm(1, on, off)
+                    self.q.put_nowait("15:"+str(level))
                 except:
                     logging.debug("failed to read humidity")
                     read_ok = False
-                    time.sleep(10)
 
-            level = self.update(self.humidity)
-
-            logging.debug("humidity", str(self.humidity))
-            logging.debug("level", str(level))
-
-            # self.pwm.set_pwm(1, on, off)
-            self.q.put_nowait("15:"+str(level))
             time.sleep(10)
 
         logging.info("Stopping Ventilation done")
