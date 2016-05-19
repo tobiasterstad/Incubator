@@ -23,7 +23,7 @@ class Ventilation(threading.Thread):
         self.ki = 1.0
 
         self.pid_max = 4095
-        self.pid_min = 0
+        self.pid_min = 2000
 
         self._running = True
 
@@ -51,11 +51,8 @@ class Ventilation(threading.Thread):
 
                 level = self.update(self.humidity)
 
-                logging.debug("humidity", str(self.humidity))
-                logging.debug("level", str(level))
-
-                # self.pwm.set_pwm(1, on, off)
-                self.q.put_nowait("15:"+str(level))
+                logging.debug("Humidity: {0}, Level: {1}".format(self.humidity, level))
+                self.q.put_nowait("15:{0}".format(level))
             except:
                 logging.debug("failed to read humidity")
 
@@ -68,7 +65,7 @@ class Ventilation(threading.Thread):
 
     def set_point(self, value=1.0):
         if self.expected_value != value:
-            logging.debug("Change ventilation set point" + str(value))
+            logging.debug("Change ventilation set point {}".format(value))
         self.expected_value = value
 
     def within_min_max(self, output):
@@ -88,11 +85,12 @@ class Ventilation(threading.Thread):
         output = self.within_min_max(output_proportional + output_integral)
 
         # Check that no windup can occur, if windup dont integrate the error.
-        if self.pid_min < output < self.pid_max:
+        if self.pid_min <= output <= self.pid_max:
             self.integral = integral
 
-        logging.info("Ventilation: %s OUT: %s E: %s P: %s I: %s", str(measured_value), int(output), str(error),
-                     int(output_proportional), int(output_integral))
+        logging.info("Ventilation: {0} OUT: {1} E: {2} P: {3} I: {4}"
+                     .format(measured_value, output, error, output_proportional, output_integral))
+
         return int(output)
 
     def get_ki(self):
