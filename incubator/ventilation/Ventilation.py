@@ -46,12 +46,14 @@ class Ventilation(threading.Thread):
         while self._running:
             try:
                 humidity = self.htu21d.read_humidity()
-                if humidity > 0 and self.humidity - 20 < humidity < self.humidity + 20:
+                temp = self.htu21d.read_temperature()
+
+                if humidity > 0 and self.humidity - 40 < humidity < self.humidity + 40:
                     self.humidity = humidity
 
                 level = self.update(self.humidity)
 
-                logging.debug("Humidity: {0}, Level: {1}".format(self.humidity, level))
+                logging.debug("Humidity: {0}% RH, Level: {1}, Temp: {2}".format(self.humidity, level, temp))
                 self.q.put_nowait("15:{0}".format(level))
             except:
                 logging.debug("failed to read humidity")
