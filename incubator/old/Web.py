@@ -2,11 +2,20 @@ __author__ = 'tobias'
 
 import logging
 
+from flask import Flask
+
+
+app = Flask(__name__)
+app.run(host='0.0.0.0')
 
 class Web:
 
     def __init__(self):
         logging.info("init web")
+
+    @app.route('/')
+    def hello_world(self):
+        return 'Hello World!'
 
     @staticmethod
     def update(date, temp, pid):

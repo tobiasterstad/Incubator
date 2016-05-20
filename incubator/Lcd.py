@@ -1,18 +1,29 @@
 __author__ = 'tobias'
 
-import smbus
+try:
+
+    import smbus.SMBus
+except ImportError:
+    debug = True
+    from devmocks import SMBus
+
 import time
 
 
 class Lcd():
     def __init__(self):
-        self.bus = smbus.SMBus(1)
+        self.bus = SMBus(1)
         self.address = 0x2c
         self.back_light_on(1)
         self.set_contrast(150)
 
-    def update(self, temp, day, pid, roll, humidity):
+    def update(self, state, roll):
         try:
+            day = state.get_day()
+            temp = state.get_temp1()
+            pid = state.get_pid()
+            humidity = state.get_humidity()
+
             self.clear()
             self.message("Temp: " + str(round(temp, 1)) + "  Dag: " + str(day) + "\n")
             self.message("PID : " + str(pid) + "/400\n")
@@ -27,7 +38,7 @@ class Lcd():
     def blink_on(self):
         self.bus.write_byte_data(self.address, 0xfe, 83)
 
-    def blink_on(self):
+    def blink_off(self):
         self.bus.write_byte_data(self.address, 0xfe, 84)
 
     def set_contrast(self, contrast):

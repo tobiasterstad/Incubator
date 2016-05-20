@@ -1,6 +1,11 @@
 __author__ = 'tobias'
 
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    from devmocks import GPIO
+    debug = True
+
 import threading
 import time
 import logging
@@ -18,7 +23,7 @@ class SSRRegulator(threading.Thread):
 
         self.pid_max = 400
         self.pid_min = 0
-        self.f1 = open('/var/www/pid.php', 'w+')
+        # self.f1 = open('/var/www/pid.php', 'w+')
 
         # Pin 11 or 7
         self.pin = 11
@@ -102,13 +107,13 @@ class SSRRegulator(threading.Thread):
         if self.pid_min < output < self.pid_max and 35.0 < measured_value < 39:
             self.integral = integral
 
-        self.f1.write("V:"+str(measured_value)
-                      + ", E:"+str(error)
-                      + ", I:"+str(self.integral)
-                      + ", Up:"+str(output_proportional)
-                      + ", Ui:"+str(output_integral)
-                      + ", U:"+str(output)+"\n")
-        self.f1.flush()
+        # self.f1.write("V:"+str(measured_value)
+        #               + ", E:"+str(error)
+        #               + ", I:"+str(self.integral)
+        #               + ", Up:"+str(output_proportional)
+        #               + ", Ui:"+str(output_integral)
+        #               + ", U:"+str(output)+"\n")
+        # self.f1.flush()
         logging.debug("TEMP: %s OUT: %s E: %s P: %s I: %s", str(measured_value), int(output), str(error),
                       int(output_proportional), int(output_integral))
 

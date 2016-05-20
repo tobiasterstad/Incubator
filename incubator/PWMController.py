@@ -4,14 +4,18 @@ import threading
 import logging
 from Queue import Queue
 
-from servopi.ABE_ServoPi import PWM
-import smbus
+try:
+    from servopi.ABE_ServoPi import PWM
+    import smbus.SMBus
+except ImportError:
+    debug = True
+    from devmocks import GPIO, SMBus, PWM
 
 
 class PWMController(threading.Thread):
 
     def __init__(self, q):
-        self.pwm = PWM(smbus.SMBus(1), 0x60)
+        self.pwm = PWM(SMBus(1), 0x60)
         self.pwm.set_pwm_freq(50)
         self.pwm.output_enable()
         self.q = q
