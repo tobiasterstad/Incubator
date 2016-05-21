@@ -92,9 +92,9 @@ class Config:
         f.write("humidity="+str(self.humidity)+"\n")
         f.write("k="+str(self.k)+"\n")
         f.write("i="+str(self.i)+"\n")
-        f.write("token={0}".format(self.token))
-        f.write("user_key={0}".format(self.user_key))
-        f.write("debug={0}".format(self.debug))
+        f.write("token={0}\n".format(self.token))
+        f.write("user_key={0}\n".format(self.user_key))
+        f.write("debug={0}\n".format(self.debug))
         f.close()
 
     def get_token(self):

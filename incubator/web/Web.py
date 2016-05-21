@@ -11,6 +11,7 @@ app = Flask(__name__)
 temp = 0.0
 state = None
 config = None
+incubator = None
 
 
 @app.route('/')
@@ -28,6 +29,7 @@ def show_temp():
                            set_humidity=config.get_humidity(),
                            humidity_level=state.get_humidity_level())
 
+
 @app.route("/shutdown")
 def shutdown_server():
     func = request.environ.get('werkzeug.server.shutdown')
@@ -37,13 +39,27 @@ def shutdown_server():
     return "shutdown server"
 
 
+@app.route("/humidity/<humidity>")
+def set_humidity(humidity):
+    global incubator
+    humidity = int(humidity)
+    if humidity < 40 or humidity > 80:
+        raise Exception("humidity must be between 40 and 80")
+
+    logging.info("Change humidity to {0}".format(humidity))
+    incubator.set_humidity(humidity)
+    return "humidity set"
+
+
 class Web(threading.Thread):
 
-    def __init__(self, incubator):
+    def __init__(self, incubator2):
         print("Start WS")
         self._running = False
         threading.Thread.__init__(self)
-        self.incubator = incubator
+        self.incubator = incubator2
+        global incubator
+        incubator = incubator2
 
     def run(self):
         logging.info("Starting Web")

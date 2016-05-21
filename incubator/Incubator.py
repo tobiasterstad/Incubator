@@ -54,6 +54,10 @@ class Incubator:
             self.start_time = datetime.today()
             self.roll_time = datetime.today()
 
+    def set_humidity(self, humidity):
+        self.config.set_humidity(humidity)
+        self.config.save()
+
     def send_notification(self, message):
         try:
             token = self.config.get_token()
