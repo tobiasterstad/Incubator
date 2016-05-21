@@ -10,7 +10,6 @@ from SSRRegulator import SSRRegulator
 # from iohandler.IoHandler import IoHandler
 from ventilation.Ventilation import Ventilation
 from State import State
-from ventilation.htu21d import HTU21D
 
 from web import Web
 
@@ -23,6 +22,7 @@ import sys
 import logging
 from PWMController import PWMController
 from Queue import Queue
+import pushover
 
 
 class Incubator:
@@ -50,6 +50,10 @@ class Incubator:
         else:
             self.start_time = datetime.today()
             self.roll_time = datetime.today()
+
+    def send_notification(self, message):
+        pushover.init('aip68d2fg6k4xwcmewkvx7rm8z5r79')
+        pushover.Client('u71gzv4guawn5k4cs24jnj726prkdh').send_message(message, title="Incubator")
 
     def signal_term_handler(self, signal, frame):
         logging.debug("got SIGTERM")
@@ -91,6 +95,8 @@ class Incubator:
     def main(self):
         logging.info("Incubator started... " + self.start_time.strftime('%Y-%m-%d %H:%M:%S'))
 
+        self.send_notification("Incubator started")
+
         config = Config()
         self.ssr.set_point(config.get_temp())
 
@@ -121,6 +127,9 @@ class Incubator:
 
             pid = self.ssr.update(state.get_temp1())
             state.set_pid(pid)
+
+            if state.temp1 > 37.8:
+                self.send_notification("High temp alert, {} gr".format(state.temp1))
 
             if i >= 10:
                 # Read humidity and temp each 10 seconds
