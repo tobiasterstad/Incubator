@@ -1,5 +1,3 @@
-from findertools import shutdown
-
 __author__ = 'tobias'
 # coding=UTF-8
 
