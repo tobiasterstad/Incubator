@@ -4,8 +4,7 @@ import logging
 import threading
 import time
 
-from flask import Flask
-from flask import render_template
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
@@ -29,6 +28,14 @@ def show_temp():
                            set_humidity=config.get_humidity(),
                            humidity_level=state.get_humidity_level())
 
+@app.route("/shutdown")
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+    return "shutdown server"
+
 
 class Web(threading.Thread):
 
@@ -41,10 +48,10 @@ class Web(threading.Thread):
         logging.info("Starting Web")
         self._running = True
 
-        while self._running:
-            global app
-            app.run(host='0.0.0.0', port=4000)
-            time.sleep(10)
+        global app
+        app.run(host='0.0.0.0', port=4000)
+        logging.info("Shutdown")
+        self._running = False
 
     def update(self, new_state, new_config):
         logging.debug("Update web")

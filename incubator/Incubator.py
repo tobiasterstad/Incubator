@@ -44,6 +44,8 @@ class Incubator:
         self.ventilation.set_point(40)
         self.ventilation.start()
 
+        self.config = Config()
+
         if day_tmp != 1:
             self.start_time = datetime.today() - timedelta(days=day_tmp - 1)
             self.roll_time = datetime.today()
@@ -52,8 +54,14 @@ class Incubator:
             self.roll_time = datetime.today()
 
     def send_notification(self, message):
-        pushover.init('aip68d2fg6k4xwcmewkvx7rm8z5r79')
-        pushover.Client('u71gzv4guawn5k4cs24jnj726prkdh').send_message(message, title="Incubator")
+        try:
+            token = self.config.get_token()
+            user_key = self.config.get_user_key()
+
+            pushover.init(token)
+            pushover.Client(user_key).send_message(message, title="Incubator")
+        except:
+            logging.error("Failed to notify")
 
     def signal_term_handler(self, signal, frame):
         logging.debug("got SIGTERM")
@@ -70,17 +78,13 @@ class Incubator:
         return diff.days + 1
 
     def log_incubator_state(self, config, state):
-        time_str = state.get_ts()
-        temp = state.get_temp1()
-        pid = state.get_pid()
-        day = state.get_day()
-
         data = {
-            "ts": time_str,
-            "temp": temp,
+            "ts": state.get_ts(),
+            "temp1": state.get_temp1(),
+            "temp2": state.get_temp2(),
             "set_temp": config.get_temp(),
-            "heat pid": pid,
-            "day": day,
+            "heat pid": state.get_pid(),
+            "day": state.get_day(),
             "humidity": state.get_humidity(),
             "humidity pid": state.get_humidity_level(),
             "roller": self.roller.get_minutes_from_last_roll()
@@ -94,14 +98,12 @@ class Incubator:
 
     def main(self):
         logging.info("Incubator started... " + self.start_time.strftime('%Y-%m-%d %H:%M:%S'))
-
         self.send_notification("Incubator started")
 
-        config = Config()
-        self.ssr.set_point(config.get_temp())
+        self.ssr.set_point(self.config.get_temp())
 
         # Start roller
-        self.roller.set_day(config.get_day())
+        self.roller.set_day(self.config.get_day())
         self.roller.start()
 
         web = Web.Web()
@@ -141,24 +143,24 @@ class Incubator:
 
             if i >= 30:
                 # Set new temp from config file
-                config.reload()
-                self.ssr.set_point(config.get_temp())
-                self.ssr.set_k(config.get_k())
-                self.ssr.set_i(config.get_i())
+                self.config.reload()
+                self.ssr.set_point(self.config.get_temp())
+                self.ssr.set_k(self.config.get_k())
+                self.ssr.set_i(self.config.get_i())
 
-                self.ventilation.set_point(config.get_humidity())
+                self.ventilation.set_point(self.config.get_humidity())
 
                 state.set_day(self.get_days_from_start())
 
-                if config.get_day() != state.get_day():
-                    config.set_day(state.get_day())
-                    config.save()
+                if self.config.get_day() != state.get_day():
+                    self.config.set_day(state.get_day())
+                    self.config.save()
                     self.roller.set_day(state.get_day())
 
-                self.log_incubator_state(config, state)
+                self.log_incubator_state(self.config, state)
 
                 # update web page
-                web.update(state, config)
+                web.update(state, self.config)
 
                 i = 0
             else:
@@ -191,6 +193,7 @@ if __name__ == '__main__':
 
     # Add signal handler
     signal.signal(signal.SIGTERM, incubator.signal_term_handler)
+    signal.signal(signal.SIGHUP, incubator.signal_term_handler)
 
     # Run incubator
     incubator.main()

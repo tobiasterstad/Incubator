@@ -13,6 +13,9 @@ class Config:
         self.humidity = 45
         self.k = 100.0
         self.i = 1.0
+        self.token = ''
+        self.user_key = ''
+        self.debug = False
         self.reload()
 
     def reload(self):
@@ -41,6 +44,17 @@ class Config:
             if x[0] == 'i':
                 self.i = x[1].strip()
 
+            if x[0] == 'token':
+                self.token = x[1].strip()
+
+            if x[0] == 'user_key':
+                self.user_key = x[1].strip()
+
+            if x[0] == 'debug':
+                if x[1].strip() == 'True':
+                    self.debug = True
+                else:
+                    self.debug = False
         f.close()
 
     def get_temp(self):
@@ -78,5 +92,16 @@ class Config:
         f.write("humidity="+str(self.humidity)+"\n")
         f.write("k="+str(self.k)+"\n")
         f.write("i="+str(self.i)+"\n")
-
+        f.write("token={0}".format(self.token))
+        f.write("user_key={0}".format(self.user_key))
+        f.write("debug={0}".format(self.debug))
         f.close()
+
+    def get_token(self):
+        return self.token
+
+    def get_user_key(self):
+        return self.user_key
+
+    def get_debug(self):
+        return self.debug
