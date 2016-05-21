@@ -128,7 +128,7 @@ class Incubator:
             pid = self.ssr.update(state.get_temp1())
             state.set_pid(pid)
 
-            if state.temp1 > 37.8:
+            if state.temp1 > 38.5:
                 self.send_notification("High temp alert, {} gr".format(state.temp1))
 
             if i >= 10:
