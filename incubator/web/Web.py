@@ -39,10 +39,11 @@ def shutdown_server():
 
 class Web(threading.Thread):
 
-    def __init__(self):
+    def __init__(self, incubator):
         print("Start WS")
         self._running = False
         threading.Thread.__init__(self)
+        self.incubator = incubator
 
     def run(self):
         logging.info("Starting Web")
@@ -52,6 +53,8 @@ class Web(threading.Thread):
         app.run(host='0.0.0.0', port=4000)
         logging.info("Shutdown")
         self._running = False
+        # self.incubator.signal_term_handler(None, None)
+        self.incubator.shutdown()
 
     def update(self, new_state, new_config):
         logging.debug("Update web")

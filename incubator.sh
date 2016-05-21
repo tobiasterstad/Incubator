@@ -13,9 +13,6 @@ if [ "$1" = "start" ] ; then
     sudo modprobe w1-therm
     sudo python $INCUBATOR_HOME/incubator/Incubator.py >> $INCUBATOR_HOME/incubator.log 2>&1 &
 elif [ "$1" = "stop" ] ; then
-#ps axf | grep python | grep -v grep | awk '{print "kill " $1}'
-
-    PID=`ps axf | grep "sudo python $INCUBATOR_HOME/incubator/Incubator.py" | grep -v grep | awk '{print $1}'`
-    kill "$PID"
+    curl http://localhost:4000/shutdown
     echo "Stopping incubator"
 fi

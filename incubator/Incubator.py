@@ -1,3 +1,5 @@
+from findertools import shutdown
+
 __author__ = 'tobias'
 # coding=UTF-8
 
@@ -45,6 +47,7 @@ class Incubator:
         self.ventilation.start()
 
         self.config = Config()
+        self._running = True
 
         if day_tmp != 1:
             self.start_time = datetime.today() - timedelta(days=day_tmp - 1)
@@ -65,12 +68,7 @@ class Incubator:
 
     def signal_term_handler(self, signal, frame):
         logging.debug("got SIGTERM")
-        self.roller.stop()
-        self.ssr.stop()
-        self.ventilation.stop()
-        self.pwm_controller.stop()
-        logging.info("Stopped Incubator")
-        sys.exit(0)
+        self.shutdown()
 
     # Get the number of days since start
     def get_days_from_start(self):
@@ -96,6 +94,21 @@ class Incubator:
         #              + str(day) + ", " + str(state.get_humidity()) + ", " + str(
         #     self.roller.get_minutes_from_last_roll()))
 
+    def shutdown(self):
+        self._running = False
+
+        # Stop all services
+        self.roller.stop()
+        self.ssr.stop()
+        self.ventilation.stop()
+        self.pwm_controller.stop()
+        self.q.put("exit")
+        self.roller.join()
+        self.ssr.join()
+        self.ventilation.join()
+        self.pwm_controller.join()
+        # self.io_handler.stop()
+
     def main(self):
         logging.info("Incubator started... " + self.start_time.strftime('%Y-%m-%d %H:%M:%S'))
         self.send_notification("Incubator started")
@@ -106,7 +119,7 @@ class Incubator:
         self.roller.set_day(self.config.get_day())
         self.roller.start()
 
-        web = Web.Web()
+        web = Web.Web(self)
         web.start()
         lcd = Lcd()
 
@@ -123,7 +136,8 @@ class Incubator:
         i = 0
         state = State()
         state.set_day(self.get_days_from_start())
-        while True:
+
+        while self._running:
             state.update_ts()
             state.set_temp1(temp_sensor.read_temp())
 
@@ -170,19 +184,7 @@ class Incubator:
             sys.stdout.flush()
             time.sleep(1)
 
-        # Stop all services
-        self.roller.stop()
-        self.ssr.stop()
-        self.ventilation.stop()
-        self.pwm_controller.stop()
-        web.stop()
-        self.q.put("exit")
-
-        self.roller.join()
-        self.ssr.join()
-        self.ventilation.join()
-        self.pwm_controller.join()
-        # self.io_handler.stop()
+        self.shutdown()
 
 
 if __name__ == '__main__':
