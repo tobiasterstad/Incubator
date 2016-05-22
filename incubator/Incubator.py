@@ -151,8 +151,11 @@ class Incubator:
 
             if i >= 10:
                 # Read humidity and temp each 10 seconds
-                state.set_temp2(htu21d.read_temperature())
-                state.set_humidity(htu21d.read_humidity())
+                try:
+                    state.set_temp2(htu21d.read_temperature())
+                    state.set_humidity(htu21d.read_humidity())
+                except:
+                    self.send_notification("Failed to read htu21d")
 
                 self.ventilation.set_state(state)
                 state.set_humidity_level(self.ventilation.get_output_level())
