@@ -1,13 +1,10 @@
 __author__ = 'tobias'
 
 try:
-
-    import smbus.SMBus
+    from smbus import SMBus
 except ImportError:
     debug = True
     from devmocks import SMBus
-
-import time
 
 
 class Lcd():

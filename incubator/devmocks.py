@@ -24,6 +24,7 @@ class GPIO:
     def output(p1, p2):
         None
 
+
 class SMBus:
 
     def __init__(self, param):
@@ -34,6 +35,7 @@ class SMBus:
 
     def write_byte(self, p1, p2):
         None
+
 
 class PWM:
     def __init__(self, p1, p2):
@@ -47,6 +49,7 @@ class PWM:
 
     def set_pwm(self, p1, p2, p3):
         None
+
 
 class HTU21D:
     def __init__(self):
