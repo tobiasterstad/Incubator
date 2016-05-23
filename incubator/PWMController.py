@@ -6,8 +6,9 @@ from Queue import Queue
 
 try:
     from servopi.ABE_ServoPi import PWM
-    import smbus.SMBus
+    from smbus import SMBus
 except ImportError:
+    print("Failed to init PWMCOntroller. ")
     debug = True
     from devmocks import GPIO, SMBus, PWM
 
