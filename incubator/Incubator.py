@@ -111,6 +111,19 @@ class Incubator:
         self.pwm_controller.join()
         # self.io_handler.stop()
 
+    def get_humidity(self):
+        hum = self.config.get_humidity()
+        if hum == 0:
+            if self.get_days_from_start() >= 0:
+                hum = 30
+            if self.get_days_from_start() >= 7:
+                hum = 40
+            if self.get_days_from_start() >= 14:
+                hum = 50
+            if self.get_days_from_start() >= 18:
+                hum = 70
+        return hum
+
     def main(self):
         logging.info("Incubator started... " + self.start_time.strftime('%Y-%m-%d %H:%M:%S'))
         self.send_notification("Incubator started")
@@ -167,7 +180,7 @@ class Incubator:
                 self.ssr.set_k(self.config.get_k())
                 self.ssr.set_i(self.config.get_i())
 
-                self.ventilation.set_point(self.config.get_humidity())
+                self.ventilation.set_point(self.get_humidity())
 
                 state.set_day(self.get_days_from_start())
 
