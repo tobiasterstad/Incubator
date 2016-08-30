@@ -3,6 +3,7 @@ __author__ = 'tobias'
 
 from datetime import *
 import time
+import json
 
 class State:
     def __init__(self):
@@ -55,3 +56,6 @@ class State:
 
     def get_humidity_level(self):
         return self.humidity_level
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
