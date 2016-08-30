@@ -1,5 +1,5 @@
 {
-  "ts": {{ ts }},
+  "ts": "{{ ts }}",
   "temp1": {{ temp1 }},
   "temp2": {{ temp2 }},
   "humidity": {{ humidity }},
