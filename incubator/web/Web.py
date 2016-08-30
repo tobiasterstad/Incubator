@@ -3,6 +3,7 @@ __author__ = 'tobias'
 import logging
 import threading
 import time
+import json
 
 from flask import Flask, request, render_template
 
@@ -28,6 +29,12 @@ def show_temp():
                            set_temp=config.get_temp(),
                            set_humidity=config.get_humidity(),
                            humidity_level=state.get_humidity_level())
+
+@app.route('/data')
+def show_data():
+    global temp
+    global state
+    return json.dump(state)
 
 
 @app.route("/shutdown")
