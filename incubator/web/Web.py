@@ -34,7 +34,7 @@ def show_temp():
 def show_data():
     global temp
     global state
-    return json.dumps(state)
+    return json.dumps(state.to_json())
 
 
 @app.route("/shutdown")
