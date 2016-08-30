@@ -1,0 +1,10 @@
+{
+  "ts": {{ ts }},
+  "temp1": {{ temp1 }},
+  "temp2": {{ temp2 }},
+  "humidity": {{ humidity }},
+  "humidity_level": {{ humidity_level }},
+  "day": {{ day }},
+  "pid": {{ pid }}
+
+}

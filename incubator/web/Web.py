@@ -34,7 +34,17 @@ def show_temp():
 def show_data():
     global temp
     global state
-    return json.dumps(state.to_json())
+    # return json.dumps(state.to_json())
+    return render_template('data.json',
+                           temp1=state.get_temp1(),
+                           temp2=state.get_temp2(),
+                           humidity=state.get_humidity(),
+                           ts=state.get_ts(),
+                           day=state.get_day(),
+                           pid=state.get_pid(),
+                           set_temp=config.get_temp(),
+                           set_humidity=config.get_humidity(),
+                           humidity_level=state.get_humidity_level())
 
 
 @app.route("/shutdown")
