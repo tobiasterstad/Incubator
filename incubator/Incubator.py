@@ -23,6 +23,7 @@ import logging
 from PWMController import PWMController
 from Queue import Queue
 import pushover
+import HttpSender
 
 
 class Incubator:
@@ -152,6 +153,8 @@ class Incubator:
         state = State()
         state.set_day(self.get_days_from_start())
 
+        http_sender = HttpSender.HttpSender()
+
         while self._running:
             state.update_ts()
             state.set_temp1(temp_sensor.read_temp())
@@ -159,8 +162,8 @@ class Incubator:
             pid = self.ssr.update(state.get_temp1())
             state.set_pid(pid)
 
-            if state.temp1 > 38.5:
-                self.send_notification("High temp alert, {} gr".format(state.temp1))
+            #if state.temp1 > 38.5:
+            #    self.send_notification("High temp alert, {} gr".format(state.temp1))
 
             if i >= 10:
                 # Read humidity and temp each 10 seconds
@@ -193,6 +196,7 @@ class Incubator:
 
                 # update web page
                 web.update(state, self.config)
+                http_sender.send("A123", state)
 
                 i = 0
             else:
