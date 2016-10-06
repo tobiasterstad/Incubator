@@ -176,6 +176,8 @@ class Incubator:
                 self.ventilation.set_state(state)
                 state.set_humidity_level(self.ventilation.get_output_level())
 
+                http_sender.send("A123", state)
+
             if i >= 30:
                 # Set new temp from config file
                 self.config.reload()
@@ -196,7 +198,6 @@ class Incubator:
 
                 # update web page
                 web.update(state, self.config)
-                http_sender.send("A123", state)
 
                 i = 0
             else:
