@@ -198,14 +198,12 @@ class Incubator:
 
                 # update web page
                 web.update(state, self.config)
-
                 i = 0
-            else:
-                i += 1
 
             lcd.update(state, self.roller.get_minutes_from_last_roll())
             sys.stdout.flush()
             time.sleep(1)
+            i += 1
 
         self.shutdown()
 
