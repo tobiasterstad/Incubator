@@ -165,7 +165,7 @@ class Incubator:
             #if state.temp1 > 38.5:
             #    self.send_notification("High temp alert, {} gr".format(state.temp1))
 
-            if i >= 10:
+            if i % 10 == 0:
                 # Read humidity and temp each 10 seconds
                 try:
                     state.set_temp2(htu21d.read_temperature())
